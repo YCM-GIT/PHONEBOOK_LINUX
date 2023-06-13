@@ -40,6 +40,6 @@ do
 
 done
 
-./tuminating
+./teminating
 echo "main_Shell was tuminated"
 exit 0

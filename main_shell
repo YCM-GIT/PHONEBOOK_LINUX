@@ -41,5 +41,5 @@ do
 done
 
 ./tuminating
-echo "main_Shell was tuminated"
+echo "main_Shell was teminated"
 exit 0

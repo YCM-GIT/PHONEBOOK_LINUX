@@ -147,11 +147,13 @@ printf("currentNode->pNext:%d\n", currentNode->pNext);
 printf("currentNode->pPrev:%d\n", currentNode->pPrev);
 printf("currentNode - Node:%d\n", (int)(currentNode - Node));
 printf("(Node + currentNode->pPrev)->pNext:%d\n", (Node + currentNode->pPrev)->pNext);
-                    (Node + currentNode->pPrev)->pNext = currentNode->pNext;
+                    (nodePtr + currentNode->pPrev)->pNext = currentNode->pNext;				// 공유 메모리
+					//currentNode->pPrev->pNext = currentNode->pNext;							// 공유 메모리
 printf("currentNode->pNext:%d\n", currentNode->pNext);
-printf("(Node + currentNode->pPrev)->pNext:%d\n", (Node + currentNode->pPrev)->pNext);
+printf("(Node + currentNode->pPrev)->pNext:%d\n", (Node + currentNode->pPrev)->pNext);		// 공유 메모리
                     //currentNode->pNext->pPrev = currentNode->pPrev;
-                    (Node + currentNode->pNext)->pPrev = currentNode->pPrev;
+                    (nodePtr + currentNode->pNext)->pPrev = currentNode->pPrev;
+					//currentNode->pNext->pPrev = currentNode->pPrev;							// 공유 메모리
 
 
 //                cur->pPrev->pNext = cur->pNext;

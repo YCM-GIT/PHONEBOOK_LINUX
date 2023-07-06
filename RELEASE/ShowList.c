@@ -100,7 +100,7 @@ int main(int argc, char* argv[]){
 	
 	printf("\n\nHead index : %d\n", listPtr->pHead);
 	printf("Tail index : %d\n", listPtr->pTail);
-	
+	printf("Sort order is : %d\n",listPtr->sort_order);
 	
 	
 
@@ -118,16 +118,18 @@ int main(int argc, char* argv[]){
 	lList->sort_order = listPtr->sort_order; //정렬을 원하는 타입을 공유메모리에서 로컬로 저장함
 	
 	returnNode = ShowList(lList); //리턴 밸류는 selected_node 소트 및 인덱스 넘버링 시작
-	listPtr->return_value = returnNode->index; //리턴 밸류에 인덱스 리턴
+	if(returnNode == 0){
+		return -1;
+	}else{
+		listPtr->return_value = returnNode->index-1; //리턴 밸류에 인덱스 리턴-1
+		
+	}
 	
-	
-	
-//	PrintList(lList);
+	printf("Local result ... \n\n");
+	PrintList2(lList);
 	SortFavorite(lList);
 	saveList(nodePtr, listPtr, lNode, lList);
 
-
-	
 	return 0;
 }
 
@@ -144,6 +146,8 @@ void ChangeList(stNode* nodePtr, stList* listPtr, localNode* lNode, localList* l
 	int curindex = listPtr->pHead; // index 넘기기용
 	//	printf("HEAD is : %d\n",curindex);
 	lList->sort_order = listPtr->sort_order;
+	
+printf("이번 헤드 인덱스 값 : %d\n",curindex);
 	
 	while(curindex != -1){ //데이터를 옮기는 루틴
 	
@@ -204,7 +208,7 @@ localNode* ShowList(localList* pList) {
     localNode* selected_node, *cur;
     //int i, user_choice=0, limit_ask=3;     
     int i, user_choice, limit_ask=3;     
-printf("here2\n");    
+//printf("here2\n");    
     if(IsEmpty2(pList)==1) {   // list가 NULL 이면 NULL 리턴
         printf("This list is empty.\n");
         return NULL;  
@@ -227,8 +231,8 @@ printf("here2\n");
         scanf(" %d",&user_choice);
         
         if(user_choice == 0) {
-//printf("quit\n");
-            return NULL;    // q를 입력받으면 NULL을 리턴함       // (230703) 리턴값을 -1로 주면 에러남.
+            // printf("quit\n");
+            return 0;    // q를 입력받으면 NULL을 리턴함                                 // (230628) NULL → 0
 printf("here1\n");
         }        
         if(user_choice <= pList->count_node && user_choice > 0) {
@@ -255,13 +259,13 @@ printf("cur->index: %d\n",cur->index);
 printf("user_choice: %d\n",user_choice);
 
     }    
-    //printf("\nselected node is %s\n", selected_node->name);
+    printf("\nselected node is %s\n", selected_node->name);
     return selected_node;          
 }
 	
 int SortList(localList* pList) {
     SortPhonebook(pList);        
-    SortFavorite(pList);
+    //SortFavorite(pList);
     // 인덱스 다시 넘버링
     //printf("*** renumbering ***\n");              
     Renumbering(pList);
@@ -301,10 +305,11 @@ int SortPhonebook(localList* pList) {
                
             if(cur==pList->pHead) {  // 바로 이전 노드가 head일 때는 tmp의 이전노드가 NULL
                 //printf("1111\n");  
-
-                if (strcmp(cur_sort, cur_next_sort)==1) {  // 자리를 스위치     
-                  
-                    tmp2 = cur_next->pNext; //tmp2는 cur의 다음다음 노드를 의미함.  노드2개일때는 tmp2가 NULL
+				printf("compare : %s and %s\n",cur_sort,cur_next_sort);
+                if (strcmp(cur_sort, cur_next_sort)>0) {  // 자리를 스위치     
+					printf("change\n");
+                    
+					tmp2 = cur_next->pNext; //tmp2는 cur의 다음다음 노드를 의미함.  노드2개일때는 tmp2가 NULL
                                             // cur_next와 cur의 위치를 바꿈
                     cur->pNext = tmp2;  // cur의다음주소 기존 cur다음다음노드의 주소,
                     cur->pPrev = cur_next;    // cur의 이전주소는 기존 cur다음노드의 주소   
@@ -317,12 +322,14 @@ int SortPhonebook(localList* pList) {
                     pList->pHead = cur_next;
 
                     switching_position=true;                    
-                    //PrintList(pList);
+                    //PrintList2(pList);
                 }                 
             } else if (cur_next==pList->pTail) {
                 //printf("3333\n");
-                if (strcmp(cur_sort, cur_next_sort)==1) {  // 자리를 스위치        
-
+								printf("compare : %s and %s\n",cur_sort,cur_next_sort);
+                if (strcmp(cur_sort, cur_next_sort)>0) {  // 자리를 스위치        
+printf("change\n");
+                    
                     tmp1 = cur->pPrev;    //tmp는 cur의 이전노드를 의미함
                                           // cur_next와 cur의 위치를 바꿈
                     cur->pNext = NULL;  // cur의다음주소 기존 cur다음다음노드의 주소,
@@ -339,7 +346,9 @@ int SortPhonebook(localList* pList) {
                 }                    
             } else {
                 //printf("2222\n");
-                if (strcmp(cur_sort, cur_next_sort)==1) {  // 자리를 스위치   
+								printf("compare : %s and %s\n",cur_sort,cur_next_sort);
+                if (strcmp(cur_sort, cur_next_sort)>0) {  // 자리를 스위치   
+                    printf("change\n");
                     
                     tmp1 = cur->pPrev;    //tmp는 cur의 이전노드를 의미함
                     tmp2 = cur_next->pNext; //tmp2는 cur의 다음다음 노드를 의미함.
